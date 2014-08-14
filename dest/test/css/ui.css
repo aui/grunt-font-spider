@@ -1,0 +1,30 @@
+@charset "utf-8";
+
+/** Reset */
+@import url("./reset.css");
+@font-face {
+  font-family: 'FZLTCXHJW--GB1-0';
+  src: url('../font/FZLTCXHJW--GB1-0.eot');/*ie*/
+  src:
+    url('../font/FZLTCXHJW--GB1-0.woff') format('woff') 
+    url('../font/FZLTCXHJW--GB1-0.ttf') format('truetype');/*现代浏览器*/
+  font-weight: normal;
+  font-style: normal;
+}
+
+h3, .title, p {
+	font-family: 'FZLTCXHJW--GB1-0';
+	font-size: 26px\0;
+}
+
+h1:hover {
+	color: #000;
+}
+
+@media screen and (min-width: 48em) and (max-width: 64em) {
+  strong       { font-family: 'FZLTCXHJW--GB1-0'; }
+  .sans-serif-m   { font-family: avenir, 'avenir next', helvetica, arial, sans-serif; }
+  .font-fantasy-m { font-family: fantasy; }
+  .font-cursive-m { font-family: cursive; }
+  .font-mono-m    { font-family: monospace; }
+}

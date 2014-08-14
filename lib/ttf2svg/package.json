@@ -1,0 +1,38 @@
+{
+  "name": "ttf2svg",
+  "version": "0.0.2",
+  "description": "Font convertor, TTF to SVG, for node.js",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "node example/test.js"
+  },
+  "bin": {
+    "ttf2svg": "bin/ttf2svg.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/qdsang/ttf2svg.git"
+  },
+  "keywords": [
+    "SVG",
+    "font",
+    "fonts",
+    "ttf",
+    "ttf2svg",
+    "webfont"
+  ],
+  "author": "qdsang",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/qdsang/ttf2svg/issues"
+  },
+  "homepage": "https://github.com/qdsang/ttf2svg",
+  "dependencies": {
+    "freetype2": "^0.1.2",
+    "jdataview": "^2.4.6",
+    "lodash": "^2.4.1"
+  },
+  "devDependencies": {
+
+  }
+}
