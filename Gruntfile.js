@@ -10,14 +10,14 @@ module.exports = function(grunt) {
   grunt.initConfig({
 
     copy: {
-      main: {
+      html: {
         src: './test/**',
         dest: './dest/'
       },
     },
 
     'font-spider': {
-      main: {
+      html: {
         src: './dest/test/**/*.html'
       }
     }

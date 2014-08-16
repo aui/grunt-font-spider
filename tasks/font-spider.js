@@ -3,9 +3,11 @@
 var fs = require('fs');
 var path = require('path');
 var util = require('util');
-var FontSpider = require('../src/font-spider.js');
-var fontOptimizer = require('../src/font-optimizer.js');
-var FontConvertor = require('../src/font-convertor.js');
+var font = require('../src/font');
+
+var color = function (string) {
+    return '\x1B[32m' + string + '\x1B[39m';
+};
 
 module.exports = function(grunt) {
 
@@ -19,14 +21,8 @@ module.exports = function(grunt) {
             ignore: [],
 
             // 额外添加的字符
-            chars: '',
+            chars: ''
 
-            // Features to include.
-            // - Use "none" to include no features.
-            // - Leave array empty to include all features.
-            // See list of all features:
-            // http://en.wikipedia.org/wiki/OpenType_feature_tag_list#OpenType_typographic_features
-            includeFeatures: ['kern']
         });
         
 
@@ -51,14 +47,7 @@ module.exports = function(grunt) {
 
             var done = that.async();
 
-            var fontSpider = new FontSpider({
-                debug: debug
-            });
-
-
-            fontSpider.load(f.src, function (data) {
-
-
+            new font.Spider(f.src, function (data) {
                 data.forEach(function (item) {
 
                     if (options.ignore.indexOf(item.name) !== -1) {
@@ -67,23 +56,30 @@ module.exports = function(grunt) {
 
                     var chars = item.chars;
 
+                    // 处重
                     options.chars.split('').forEach(function (char) {
                         if (item.chars.indexOf(char) === -1) {
                             chars += char;
                         }
                     });
 
+
                     var src;
                     item.files.forEach(function (file) {
-                        if (path.extname(file).toLocaleLowerCase() === '.ttf') {
+                        var extname = path.extname(file).toLocaleLowerCase();
+
+                        if (extname === '.ttf') {
                             src = file;
                         }
+                        
                     });
+
 
                     if (!src) {
                         grunt.log.warn('".ttf" file not found.');
                         return;
                     }
+
                     
                     var dest = src;
                     var relativeDestination = path.relative('./', dest);
@@ -93,60 +89,61 @@ module.exports = function(grunt) {
                     var out = path.join(dirname, basename);
                     var stat = fs.statSync(src);
 
-                    fontOptimizer({
-                        chars: chars,
-                        src: src,
-                        dest: dest,
-                        includeFeatures: options.includeFeatures
-                    }, function (result) {
+                    grunt.log.writeln('Chars: ' + color(chars));
 
-                        //grunt.log.writeln('Font ' + item.name);
-                        //grunt.log.writeln('Chars ' + chars.length);
-
-                        if (result.code !== 0) {
-                            var err = new Error('Error.');
-                            grunt.log.warn(result.output);
-                            grunt.fail.warn(err);
-                        } else {
-                            
-                            if (grunt.option('stack')) {
-                                // subset.pl doesn't always fail completely, for example on
-                                // fsType 4 error. So we'll assume these errors are just
-                                // warnings and let the user decide what to do.
-                                grunt.log.writeln(grunt.log.wordlist([result.output], {color: 'yellow'}));
-                            }
-
-
-                            var oldSize = stat.size / 1000;
-                            var newSize = fs.statSync(dest).size / 1000;
-
-                            grunt.log.writeln('File ' + relativeDestination + ' created: ' + oldSize + ' kB → ' + newSize + ' kB');
-
-                            var fontConvertor = new FontConvertor(dest);
-
-                            fontConvertor.toEot(out + '.eot');
-                            newSize = fs.statSync(out + '.eot').size / 1000;
-                            grunt.log.writeln('File ' + path.relative('./', out + '.eot') + ' created: ' + oldSize + ' kB → ' + newSize + ' kB');
-
-                            fontConvertor.toWoff(out + '.woff');
-                            newSize = fs.statSync(out + '.woff').size / 1000;
-                            grunt.log.writeln('File ' + path.relative('./', out + '.woff') + ' created: ' + oldSize + ' kB → ' + newSize + ' kB');
-                            
-                            // fontConvertor.toSvg(out + '.svg');
-                            // grunt.log.writeln('File ' + path.relative('./', out + '.svg') + ' created.');
-
-                        }
-
-                        done();
-                    });
+                    var fontOptimizer = new font.Optimizer(src);
+                    var result = fontOptimizer.minify(dest, chars);
                     
 
+                    if (result.code !== 0) {
+                        var err = new Error('Error.');
+                        grunt.log.warn(result.output);
+                        grunt.fail.warn(err);
+                    } else {
+                        
+                        if (grunt.option('stack')) {
+                            // subset.pl doesn't always fail completely, for example on
+                            // fsType 4 error. So we'll assume these errors are just
+                            // warnings and let the user decide what to do.
+                            grunt.log.writeln(grunt.log.wordlist([result.output], {color: 'yellow'}));
+                        }
+
+
+                        var oldSize = stat.size / 1000;
+                        var newSize;
+
+                        newSize = fs.statSync(dest).size / 1000;
+                        grunt.log.writeln('File ' + relativeDestination + ' created: ' + color(oldSize + ' kB → ' + newSize + ' kB'));
+
+                        var fontConvertor = new font.Convertor(dest);
+
+                        item.files.forEach(function (file) {
+                            
+                            var extname = path.extname(file).toLocaleLowerCase();
+                            var type = extname.replace('.', '');
+
+                            if (type === 'ttf') {
+                                return;
+                            }
+                            
+                            if (typeof fontConvertor[type] === 'function') {
+                                fontConvertor[type](file);
+                                var size = fs.statSync(file).size / 1000;
+                                grunt.log.writeln('File ' + path.relative('./', file) + ' created: ' + color(size + ' kB'));
+                            } else {
+                                grunt.log.warn('File ' + path.relative('./', file) + ' not created.');
+                            }
+                            
+                        });
+
+                    }
+
+                    done();
                 });
 
 
-            });
+            }, debug);
             
-
             
             return f;
         });

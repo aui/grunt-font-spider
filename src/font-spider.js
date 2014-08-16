@@ -7,26 +7,29 @@ var jsdom = require('jsdom');
 var css = require('css');
 
 
-var FontSpider = function (options) {
-	options = options || {};
+var FontSpider = function (htmlFiles, callback, debug) {
 
-	this._debug = options.debug;
+	if (typeof htmlFiles === 'string') {
+		htmlFiles = [htmlFiles];
+	}
+
+	this._htmlFiles = htmlFiles;
+	this._debug = !!debug;
 	this._files = {};
 	this._chars = {};
 	this._cssFiles = {};
+
+	this._load(callback);
 };
 
 FontSpider.prototype = {
 
 	constructor: FontSpider,
 
-	/**
-	 * 加载并分析 HTML 文件
-	 * @param	{Array, String}	HTML 文件列表
-	 * @param	{Function}		回调
-	 */
-	load: function (htmlFiles, callback) {
+	_load: function (callback) {
 		var that = this;
+
+		var htmlFiles = this._htmlFiles;
 
 		if (typeof htmlFiles === 'string') {
 			htmlFiles = [htmlFiles];
@@ -98,26 +101,6 @@ FontSpider.prototype = {
 			}
 		}
 
-		/*
-			[
-				{	
-					// 字体名称
-		        	name: 'FZLTCXHJW--GB1-0',
-
-		        	// 使用中的字符
-		        	chars: '宁静致远helo wrd秋水共长天一色',
-
-		        	// 字体路径
-					files: ['/Users/tangbin/Documents/github/font/FZLTCXHJW--GB1-0.eot',
-			            '/Users/tangbin/Documents/github/font/FZLTCXHJW--GB1-0.eot',
-			            '/Users/tangbin/Documents/github/font/FZLTCXHJW--GB1-0.woff',
-			            '/Users/tangbin/Documents/github/font/FZLTCXHJW--GB1-0.ttf',
-			            '/Users/tangbin/Documents/github/font/FZLTCXHJW--GB1-0.svg'
-			        ]
-		        }
-		    ]
-		*/
-
 		
 		return list;
 	},
@@ -145,36 +128,26 @@ FontSpider.prototype = {
 		var setCharsCache = function (data) {
 			
 			var cssSelectors = data.selectors.join(', ');
-			var RE_CLASS = /\:(link|visited|hover|active|focus)\b/g;
+			var RE_SPURIOUS = /\:(link|visited|hover|active|focus)\b/ig;
 
 			data.familys.forEach(function (family) {
 
 				that._chars[family] = that._chars[family] || '';
 
-				// 处理状态伪类
-				var selectors = cssSelectors.replace(RE_CLASS, '');
+				// 剔除状态伪类
+				var selectors = cssSelectors.replace(RE_SPURIOUS, '');
 
 				var elements = document.querySelectorAll(selectors);
 
 				elements = Array.prototype.slice.call(elements);
 				elements.forEach(function (element) {
 
-					// 查询当前节点最终应用的字体（因为 css 选择器有优先级）
-					//var familys = getComputedStyle(element, 'font-family');
-
-					
-					//if (familys.indexOf(family) !== -1) {// TODO: 这里要完善判断
-
-						// 找到使用了字体的文本
-						that._chars[family] += element.textContent;
-					//}
+					// 找到使用了字体的文本
+					that._chars[family] += element.textContent;
 
 				});
 			});
 
-
-
-			//that._log('[HTML] ' + JSON.stringify(cssSelectors), chars);
 
 		};
 
@@ -190,7 +163,7 @@ FontSpider.prototype = {
 			var cssDir = htmlDir;
 			var cssFile;
 
-
+			// 忽略含有有 disabled 属性的
 			if (elem.disabled) {
 				return;
 			}
@@ -250,14 +223,7 @@ FontSpider.prototype = {
 		var RE_QUOTATION = /^['"]|['"]$/g;
 		var RE_SPLIT_COMMA = /\s*,\s*/;
 
-		var ast = css.parse(string, {
-			// silent: silently fail on parse errors.
-			// source: the path to the file containing css.
-			//		   Makes errors and source maps more helpful,
-			//		   by letting them know where code comes from.
-		});
-
-		//console.log(JSON.stringify(ast, null, 4));
+		var ast = css.parse(string, {});
 
 		var parser = function (rule) {
 
@@ -275,7 +241,6 @@ FontSpider.prototype = {
 					files = files.concat(cssInfo.files);
 					selectors = selectors.concat(cssInfo.selectors);
 
-					//that._log('import', url);
 					break;
 
 				case 'font-face':
@@ -294,7 +259,6 @@ FontSpider.prototype = {
 								value = value.trim().replace(RE_QUOTATION, '');
 
 								family.name = value;
-								//that._log('font-family', value);
 								
 								break;
 
@@ -306,7 +270,6 @@ FontSpider.prototype = {
 									family.files.push(url);
 								}
 
-								//that._log('files', family.files);
 								break;
 						}
 					});
@@ -321,8 +284,6 @@ FontSpider.prototype = {
 					break;
 
 				case 'rule':
-
-					//that._log('selectors', rule.selectors);
 
 					var selector = {
 						selectors: rule.selectors,// 注意：包含伪类选择器
@@ -342,15 +303,11 @@ FontSpider.prototype = {
 									val = val.trim().replace(RE_QUOTATION, '');
 									selector.familys.push(val);
 								});
-
-								//that._log('use "' + value + '"', rule.selectors);
 								
 								break;
 
 							case 'content':
-								// TODO: content 属性可以继承字体，这里需要深入处理
-								//selector.content = value;
-								//that._log('content', value);
+								// 忽略这里
 								break;
 						}
 					});
@@ -382,3 +339,5 @@ FontSpider.prototype = {
 
 
 module.exports = FontSpider;
+
+// TODO: 测试大写 css 规则

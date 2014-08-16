@@ -1,7 +1,7 @@
 {
   "name": "grunt-font-spider",
   "description": "Optimize fonts with Grunt",
-  "version": "0.0.1",
+  "version": "0.0.1-beta",
   "homepage": "https://github.com/aui/grunt-font-spider",
   "author": {
     "name": "aui",
@@ -52,6 +52,6 @@
     "eot",
     "truetype",
     "css",
-    "icon"
+    "webfont"
   ]
 }

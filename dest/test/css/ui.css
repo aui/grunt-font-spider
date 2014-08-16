@@ -4,10 +4,12 @@
 @import url("./reset.css");
 @font-face {
   font-family: 'FZLTCXHJW--GB1-0';
-  src: url('../font/FZLTCXHJW--GB1-0.eot');/*ie*/
+  /*IE*/
+  src: url('../font/FZLTCXHJW--GB1-0.eot');
+  /*现代浏览器*/
   src:
     url('../font/FZLTCXHJW--GB1-0.woff') format('woff') 
-    url('../font/FZLTCXHJW--GB1-0.ttf') format('truetype');/*现代浏览器*/
+    url('../font/FZLTCXHJW--GB1-0.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }

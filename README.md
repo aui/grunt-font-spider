@@ -1,6 +1,6 @@
 #	“字蛛”-中文字体压缩工具
 
-汉字字体文件平均每套 5M 大小，这严重阻碍其在 web 设计中的运用——而 font-spider（字蛛） 便是一款针对中文字体的压缩工具，它采用独特的分析算法，可大幅度的压缩字体文件体积，压缩率通常可以高达 95%。
+汉字字体文件平均每套 5M 大小，这严重阻碍其在 web 设计中的运用——而 font-spider（字蛛） 便是一款针对中文字体的压缩工具，它基于爬虫算法来抓取页面、css、字体的数据，通常可将字体压成几十 kb 的大小。
 
 ##	工作原理
 
@@ -8,22 +8,33 @@
 2.	记录``@font-face``语句声明的字体，并且记录使用改字体的 css 选择器
 3.	通过 css 选择器查找 html 文档的节点，记录节点上的文本
 4.	找到字体文件（.ttf）并分析字体，删除没有使用的字符
-5.	生成新的 .ttf 与 .eot 字体格式实现全浏览器兼容
+5.	生成各个浏览器最佳字体格式
 
 ##	使用范例
 
 ###	css
 
+#### 在 css 中声明字体
+
 ```
 @font-face {
   font-family: 'FZLTCXHJW--GB1-0';
-  src: url('../font/FZLTCXHJW--GB1-0.eot');/*ie*/
-  src: url('../font/FZLTCXHJW--GB1-0.ttf') format('truetype');/*现代浏览器*/
+  /*IE*/
+  src: url('../font/FZLTCXHJW--GB1-0.eot');
+  /*现代浏览器*/
+  src:
+    url('../font/FZLTCXHJW--GB1-0.woff') format('woff') 
+    url('../font/FZLTCXHJW--GB1-0.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 ```
-字体格式兼容性参考：<http://caniuse.com/#feat=fontface>
+
+####	放置 .ttf 的字体文件
+
+工具依赖 .ttf 格式的字体作为源文件来压缩，``@font-face``中的 src 定义 .ttf 字体必须存在（.eot 与 .woff 的字体可以没有，工具会自动生成）
+
+> 字体格式兼容性参考：<http://caniuse.com/#feat=fontface>
 
 ###	Gruntfile.js
 
