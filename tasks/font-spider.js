@@ -5,9 +5,6 @@ var path = require('path');
 var util = require('util');
 var font = require('../src/font');
 
-var color = function (string) {
-    return '\x1B[32m' + string + '\x1B[39m';
-};
 
 module.exports = function(grunt) {
 
@@ -48,20 +45,31 @@ module.exports = function(grunt) {
             var done = that.async();
 
             new font.Spider(f.src, function (data) {
+                
                 data.forEach(function (item) {
 
+                    // 忽略的字体
                     if (options.ignore.indexOf(item.name) !== -1) {
                         return;
                     }
 
+                    var includeChars = '';
                     var chars = item.chars;
 
-                    // 处重
-                    options.chars.split('').forEach(function (char) {
+                    
+                    if (typeof options.chars === 'string') {
+                        includeChars = options.chars
+                    } else if (typeof options.chars === 'object') {
+                        includeChars = options.chars[item.name];
+                    }
+
+
+                    // 除重
+                    includeChars.split('').forEach(function (char) {
                         if (item.chars.indexOf(char) === -1) {
                             chars += char;
                         }
-                    });
+                    }); 
 
 
                     var src;
@@ -82,14 +90,13 @@ module.exports = function(grunt) {
 
                     
                     var dest = src;
-                    var relativeDestination = path.relative('./', dest);
                     var dirname = path.dirname(dest);
                     var extname = path.extname(dest);
                     var basename = path.basename(dest, extname);
                     var out = path.join(dirname, basename);
                     var stat = fs.statSync(src);
 
-                    grunt.log.writeln('Chars: ' + color(chars));
+                    
 
                     var fontOptimizer = new font.Optimizer(src);
                     var result = fontOptimizer.minify(dest, chars);
@@ -100,6 +107,10 @@ module.exports = function(grunt) {
                         grunt.log.warn(result.output);
                         grunt.fail.warn(err);
                     } else {
+
+                        grunt.log.writeln('Font name: ' + item.name);
+                        grunt.log.writeln('Include chars: ' + chars);
+                        grunt.log.writeln('Original size: ' + (stat.size / 1000 + ' kB').green);
                         
                         if (grunt.option('stack')) {
                             // subset.pl doesn't always fail completely, for example on
@@ -109,11 +120,8 @@ module.exports = function(grunt) {
                         }
 
 
-                        var oldSize = stat.size / 1000;
-                        var newSize;
-
-                        newSize = fs.statSync(dest).size / 1000;
-                        grunt.log.writeln('File ' + relativeDestination + ' created: ' + color(oldSize + ' kB → ' + newSize + ' kB'));
+                        var size = fs.statSync(dest).size / 1000;
+                        grunt.log.writeln('File ' + path.relative('./', dest).cyan + ' created: ' + (size + ' kB').green);
 
                         var fontConvertor = new font.Convertor(dest);
 
@@ -129,7 +137,7 @@ module.exports = function(grunt) {
                             if (typeof fontConvertor[type] === 'function') {
                                 fontConvertor[type](file);
                                 var size = fs.statSync(file).size / 1000;
-                                grunt.log.writeln('File ' + path.relative('./', file) + ' created: ' + color(size + ' kB'));
+                                grunt.log.writeln('File ' + path.relative('./', file).cyan + ' created: ' + (size + ' kB').green);
                             } else {
                                 grunt.log.warn('File ' + path.relative('./', file) + ' not created.');
                             }
@@ -138,10 +146,10 @@ module.exports = function(grunt) {
 
                     }
 
-                    done();
+                    
                 });
 
-
+                done();
             }, debug);
             
             

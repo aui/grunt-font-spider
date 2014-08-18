@@ -5,6 +5,7 @@ var path = require('path');
 
 var ttf2eot = require('../lib/ttf2eot');
 var ttf2woff = require('../lib/ttf2woff');
+var ttf2svg = require('../lib/ttf2svg');
 
 var FontConvertor = function (ttfFile) {
 
@@ -40,7 +41,16 @@ FontConvertor.prototype = {
 		var woff = new Buffer(ttf2woff(ttf).buffer);
 
 		fs.writeFileSync(outfile, woff);
-	}
+	},
+
+	svg: function (outfile) {
+		outfile = outfile || this._out + '.svg';
+
+		var ttf = this._ttf;
+		var svg = ttf2svg(ttf);
+
+		fs.writeFileSync(outfile, svg);
+	},
 
 };
 

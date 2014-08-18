@@ -27,6 +27,7 @@ FontSpider.prototype = {
 	constructor: FontSpider,
 
 	_load: function (callback) {
+
 		var that = this;
 
 		var htmlFiles = this._htmlFiles;
@@ -55,9 +56,11 @@ FontSpider.prototype = {
 			});
 			
 		}, function (errors) {
+
 			if (errors) {
 				throw errors;
 			}
+
 			var result = that._getResult();
 			that._log('result', result);
 
@@ -116,20 +119,11 @@ FontSpider.prototype = {
 		var that = this;
 		var htmlDir = path.dirname(htmlFile);
 		var styleSheets = document.querySelectorAll('link[rel=stylesheet], style');
-		
-		
-		var getComputedStyle = function (elem, name) {
-			return elem.ownerDocument.defaultView
-			.getComputedStyle(elem, null)
-			.getPropertyValue(name);
-		};
-
+		var RE_SPURIOUS = /\:(link|visited|hover|active|focus)\b/ig;
 
 		var setCharsCache = function (data) {
-			
-			var cssSelectors = data.selectors.join(', ');
-			var RE_SPURIOUS = /\:(link|visited|hover|active|focus)\b/ig;
 
+			var cssSelectors = data.selectors.join(', ');
 			data.familys.forEach(function (family) {
 
 				that._chars[family] = that._chars[family] || '';
@@ -188,6 +182,7 @@ FontSpider.prototype = {
 			if (cssFile && that._cssFiles[cssFile]) {
 				cssInfo = that._cssFiles[cssFile];
 			} else {
+
 				// 根据 css 选择器查询使用了自定义字体的节点
 				cssInfo = that._cssParser(cssContent, cssDir);
 				cssInfo.files.forEach(function (data, cssFile) {
@@ -251,8 +246,10 @@ FontSpider.prototype = {
 					};
 
 					rule.declarations.forEach(function (declaration) {
+
 						var property = declaration.property;
 						var value = declaration.value;
+
 						switch (property) {
 							case 'font-family':
 
@@ -291,7 +288,9 @@ FontSpider.prototype = {
 						content: ''
 					};
 
+
 					rule.declarations.forEach(function (declaration) {
+
 						var property = declaration.property;
 						var value = declaration.value;
 
