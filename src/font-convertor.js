@@ -8,7 +8,6 @@ var ttf2woff = require('../lib/ttf2woff');
 var ttf2svg = require('../lib/ttf2svg');
 
 var FontConvertor = function (ttfFile) {
-
 	var dirname = path.dirname(ttfFile);
 	var extname = path.extname(ttfFile);
 	var basename = path.basename(ttfFile, extname);
@@ -49,7 +48,7 @@ FontConvertor.prototype = {
 		var ttf = this._ttf;
 		var svg = ttf2svg(ttf);
 
-		fs.writeFileSync(outfile, svg);
+		fs.writeFileSync(outfile, svg, 'utf8');
 	},
 
 };

@@ -84,7 +84,7 @@ module.exports = function(grunt) {
 
 
                     if (!src) {
-                        grunt.log.warn('".ttf" file not found.');
+                        grunt.fail.warn('".ttf" file not found.');
                         return;
                     }
 
@@ -109,7 +109,7 @@ module.exports = function(grunt) {
                     } else {
 
                         grunt.log.writeln('Font name: ' + item.name);
-                        grunt.log.writeln('Include chars: ' + chars);
+                        grunt.log.writeln('Include chars: ' + chars.replace(/[\n\r\t]/g, ''));
                         grunt.log.writeln('Original size: ' + (stat.size / 1000 + ' kB').green);
                         
                         if (grunt.option('stack')) {

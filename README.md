@@ -1,8 +1,9 @@
-#	“字蛛”-中文字体压缩工具
+#	“字蛛”-中文字体自动化压缩工具
 
-“字蛛”是一款针对中文字体的压缩工具，它基于爬虫算法来提取本地页面、css 和字体的数据，最终可将几 MB 字体压成几十 KB 的大小。
+“字蛛”采用爬虫算法来提取本地页面、css 和字体的数据，最终可将几 MB 字体压成几十 KB 的大小。使用它后，设计师可以大胆的将精美的中文字体运用在 web 设计中，而无须受约束。
 
-使用它后，设计师可以大胆的将精美的中文字体运用在 web 设计中，而无需考虑字体体积以及工程成本。
+
+![terminal](./doc/terminal.png)
 
 ##	工作原理
 
@@ -14,7 +15,8 @@
 
 ##	安装
 
-依赖 [nodejs](http://nodejs.org) 与 [gruntjs](http://gruntjs.com)。windows 需要提前安装 [perl](http://www.perl.org) 环境。
+首先安装 [nodejs](http://nodejs.org) 与 [gruntjs](http://gruntjs.com)，
+windows 需要提前安装 [perl](http://www.perl.org) 环境。然后执行：
 
 ```
 npm install grunt-font-spider --save-dev
@@ -39,13 +41,25 @@ npm install grunt-font-spider --save-dev
 }
 ```
 
-声明字体后，可以使用``font-family``来使用该字体。
+声明字体后，可以使用 css``font-family``语句来使用该字体。例如：
+
+```
+.home h1, h3.title {
+	font-family: 'FZLTCXHJW--GB1-0';
+}
+```
 
 ###	放置字体文件
 
-工具依赖 .ttf 格式的字体作为源文件来压缩，所以``@font-face``中的 src 定义 .ttf 字体必须存在（.eot 与 .woff 的字体可由工具自动生成）。
+工具使用 .ttf 格式的字体作为源文件来压缩，所以``@font-face``中的 src 定义的 .ttf 文件必须存在。
 
-###	Gruntfile.js
+>.eot、.woff、.svg 的格式工具会自动生成。
+
+###	压缩字体
+
+编写 grunt 配置文件 Gruntfile.js 然后运行 grunt。
+
+Gruntfile.js 示例：
 
 ```
 module.exports = function(grunt) {
@@ -74,12 +88,12 @@ module.exports = function(grunt) {
 };
 ```
 
-##	能力限制
+##	注意事项
 
-1.	样式表不支持绝对路径
+1.	请保证 html 文件与 css 文件均在本地（相对路径）
 2.	不支持动态生成的文本
 3.	不支持 js 动态插入的 css 规则
-4.	不支持 css ``content``的字符
+4.	不支持 css ``content``属性插入的字符
 
 ##	字体兼容性参考
 
@@ -94,4 +108,4 @@ module.exports = function(grunt) {
 
 =============
 
-版权声明：若在网页中使用商业中文字体，请联系相关字体厂商购买使用权再使用。
+*字体受版权保护，若在网页中使用商业字体，请联系相关字体厂商购买授权*

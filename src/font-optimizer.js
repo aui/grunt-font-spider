@@ -34,13 +34,14 @@ Optimizer.prototype.minify = function (dest, chars) {
     // build execution command
     var cmd = [];
     cmd.push("perl -X ./subset.pl"); // Main executable
-    cmd.push(util.format('--chars="%s"', chars.replace(/([^\w])/g, function(r) { return "\\"+r; }))); // Included characters
+    // Included characters
+    cmd.push(util.format('--chars=%s', JSON.stringify(chars)));
     if (includeFeatures.length !== 0) {
         // Included font features
         cmd.push("--include=" + includeFeatures.join(","));
     }
-    cmd.push('"' + src + '"');
-    cmd.push('"' + temp + '"');
+    cmd.push(JSON.stringify(src));
+    cmd.push(JSON.stringify(temp));
     cmd = cmd.join(" ");
     
     var result = shell.exec(cmd, {silent: true});
