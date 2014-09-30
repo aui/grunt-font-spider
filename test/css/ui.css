@@ -3,7 +3,7 @@
 /** Reset */
 @import url("./g.css");
 @font-face {
-  font-family: 'FZLTCXHJW--GB1-0';
+  font-family: 'art';
   /*IE*/
   src: url('../font/FZLTCXHJW--GB1-0.eot');
   /*现代浏览器*/
@@ -33,7 +33,7 @@ h1 strong {
 }
 
 h1 span {
-  font-family: 'FZLTCXHJW--GB1-0', arial, sans-serif;
+  font-family: 'art', arial, sans-serif;
   font-size: 24px;
   color: #888;
 }
@@ -68,7 +68,7 @@ h1 span {
 
 
 @media screen and (min-width: 48em) and (max-width: 64em) {
-  strong       { font-family: 'FZLTCXHJW--GB1-0'; }
+  strong       { font-family: 'art'; }
   .sans-serif-m   { font-family: avenir, 'avenir next', helvetica, arial, sans-serif; }
   .font-fantasy-m { font-family: fantasy; }
   .font-cursive-m { font-family: cursive; }
