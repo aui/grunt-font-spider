@@ -3,9 +3,9 @@
 var fs = require('fs');
 var path = require('path');
 
-var ttf2eot = require('../lib/ttf2eot');
-var ttf2woff = require('../lib/ttf2woff');
-var ttf2svg = require('../lib/ttf2svg');
+var ttf2eot = require('ttf2eot');
+var ttf2woff = require('ttf2woff');
+var ttf2svg = require('ttf2svg');
 
 var FontConvertor = function (ttfFile) {
 	var dirname = path.dirname(ttfFile);

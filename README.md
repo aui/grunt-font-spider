@@ -15,12 +15,14 @@
 
 ##	安装
 
-首先安装 [nodejs](http://nodejs.org) 与 [gruntjs](http://gruntjs.com)，
-windows 需要提前安装 [perl](http://www.perl.org) 环境。然后执行：
+安装好 [nodejs](http://nodejs.org) 与 [gruntjs](http://gruntjs.com)，然后执行：
 
 ```
 npm install grunt-font-spider --save-dev
 ```
+
+1. 模块内部依赖了``jsdom``，如果遇到安装报错请看这里：<https://github.com/tmpvar/jsdom/#contextify>
+2. windows 需要安装 [perl](http://www.perl.org) 环境才可以运行。
 
 ##	使用范例
 
