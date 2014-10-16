@@ -49,7 +49,7 @@ FontConvertor.prototype = {
 		var svg = ttf2svg(ttf);
 
 		fs.writeFileSync(outfile, svg, 'utf8');
-	},
+	}
 
 };
 
