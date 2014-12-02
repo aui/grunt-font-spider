@@ -17,6 +17,9 @@ module.exports = function(grunt) {
     },
 
     'font-spider': {
+      options: {
+        backup: false
+      },
       html: {
         src: './dest/test/**/*.html'
       }
