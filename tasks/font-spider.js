@@ -50,7 +50,6 @@ module.exports = function(grunt) {
 
             fontspider.onoutput = function (data) {
                 grunt.log.writeln('Font name: ' + (data.fontName).cyan);
-                grunt.log.writeln('CSS Selectors: ' + data.selectors);
                 grunt.log.writeln('Include chars: ' + data.includeChars);
                 grunt.log.writeln('Original size: ' + (data.originalSize / 1000 + ' KB').green);
                 data.output.forEach(function (item) {
