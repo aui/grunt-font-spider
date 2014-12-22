@@ -36,7 +36,7 @@ npm install grunt-font-spider --save-dev
   src: url('../font/pinghei.eot');
   src:
     url('../font/pinghei.eot?#font-spider') format('embedded-opentype'),
-    url('../font/pinghei.woff') format('woff') 
+    url('../font/pinghei.woff') format('woff'),
     url('../font/pinghei.ttf') format('truetype'),
     url('../font/pinghei.svg') format('svg');
   font-weight: normal;
