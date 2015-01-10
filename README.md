@@ -50,12 +50,11 @@ npm install grunt-font-spider --save-dev
 ```
 
 > 1. ``@font-face``中的``src``定义的 .ttf 文件必须存在，其余的格式将由工具自动生成
-> 2. 开发阶段请使用相对路径的 CSS 与 WebFont
-> 3. 不支持动态插入的 CSS 规则与字符
-> 4. 不支持 CSS ``content``属性插入的字符
+> 2. 不支持动态插入的 CSS 规则与字符
+> 3. 不支持 CSS ``content``属性插入的字符
 
 
-### 配置
+### 配置示例
 
 ```
 module.exports = function(grunt) {
@@ -69,6 +68,7 @@ module.exports = function(grunt) {
     },
      // 字蛛插件：压缩与转码静态页面中的 WebFont
     'font-spider': {
+      options: {},
       main: {
         src: './dest/test/**/*.html'
       }
@@ -80,6 +80,16 @@ module.exports = function(grunt) {
 };
 ```
 
+### Options
+
+名称 | 类型 | 默认值 | 说明
+---- | ---- | ---- | -----
+map | Array | [] | 映射 CSS 内部 HTTP 路径到本地。示例：[['http://demo.io/css', __dirname + '/css']]
+ignore | Array | [] | 忽略的文件配置（可以是字体、CSS、HTML）。示例：['icons.ttf', '*.bk.css']
+backup | Boolean | true | 是否备份字体
+silent | Boolean | false | 不显示非关键错误
+
+
 ##	字体兼容性参考
 
 格式 | IE | Firefox | Chrome | Safari | Opera | iOS Safari | Android Browser | Chrome for Android 
@@ -90,6 +100,18 @@ module.exports = function(grunt) {
 ``.svg`` | -- | -- | 4 | 3.2 | 9.6 | 3.2 | 3 | 36
 
 来源：<http://caniuse.com/#feat=fontface>
+
+## 更新日志
+
+### 0.1.0
+
+  * 优化错误信息显示
+  * 支持``map``配置映射 CSS 文件中的 http 路径到本地目录
+  * 支持``ignore``配置忽略字体、CSS、HTML 文件
+  
+### 0.0.1
+
+  * 基于 CSS 规则压缩与转码 WebFont
 
 =============
 

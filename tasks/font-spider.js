@@ -12,15 +12,7 @@ module.exports = function(grunt) {
         var that = this;
         var debug = grunt.option('debug');
         var options = this.options({
-
-            debug: debug,
-
-            // 忽略的字体名称
-            ignore: [],
-
-            // 额外添加的字符
-            chars: ''
-
+            debug: debug
         });
         
 
