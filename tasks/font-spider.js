@@ -17,7 +17,6 @@ module.exports = function(grunt) {
         
 
         this.files.forEach(function(f) {
-            
 
             // Filter non-existing sources
             f.src.filter(function(filepath) {
@@ -38,27 +37,11 @@ module.exports = function(grunt) {
             var done = that.async();
 
 
-            var fontspider = new FontSpider(f.src, options);
-
-            fontspider.onoutput = function (data) {
-                grunt.log.writeln('Font name: ' + (data.fontName).cyan);
-                grunt.log.writeln('Include chars: ' + data.includeChars);
-                grunt.log.writeln('Original size: ' + (data.originalSize / 1000 + ' KB').green);
-                data.output.forEach(function (item) {
-                    grunt.log.writeln('File ' + (item.file).cyan + ' created: ' + (item.size / 1000 + ' kB').green)
-                });
-            };
-
-            fontspider.onend = function () {
-                done();
-            };
-
-            fontspider.onerror = function (e) {
+            new FontSpider(f.src, options)
+            .then(done, function (e) {
                 grunt.log.warn(e.message);
-                grunt.fail.fatal(e);
-            }
-
-            fontspider.start();
+                grunt.fail.fatal(e); 
+            });
             
             return f;
         });
