@@ -24,11 +24,8 @@
   "engines": {
     "node": ">= 0.8.0"
   },
-  "scripts": {
-    "test": "grunt test"
-  },
   "dependencies": {
-    "font-spider": "^0.1.0"
+    "font-spider": "*"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
