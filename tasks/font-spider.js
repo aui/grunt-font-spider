@@ -12,12 +12,17 @@ module.exports = function(grunt) {
         var that = this;
         var debug = grunt.option('debug');
         var options = this.options({
+            resourceLoad: function (file) {
+                var RE_SERVER = /^https?\:\/\//i;
+                if (RE_SERVER.test(file)) {
+                    grunt.log.writeln('Load:', file);
+                }
+            },
             debug: debug
         });
         
 
         this.files.forEach(function(f) {
-            
 
             // Filter non-existing sources
             f.src.filter(function(filepath) {
@@ -38,30 +43,42 @@ module.exports = function(grunt) {
             var done = that.async();
 
 
-            var fontspider = new FontSpider(f.src, options);
+            new FontSpider(f.src, options)
+            .then(function (webFonts) {
 
-            fontspider.onoutput = function (data) {
-                grunt.log.writeln('Font name: ' + (data.fontName).cyan);
-                grunt.log.writeln('Include chars: ' + data.includeChars);
-                grunt.log.writeln('Original size: ' + (data.originalSize / 1000 + ' KB').green);
-                data.output.forEach(function (item) {
-                    grunt.log.writeln('File ' + (item.file).cyan + ' created: ' + (item.size / 1000 + ' kB').green)
+                webFonts.forEach(function (webFont) {
+
+                    grunt.log.writeln('Font name:', color('green', webFont.name));
+                    grunt.log.writeln('Original size:', color('green', webFont.originalSize / 1000 + ' KB'));
+                    grunt.log.writeln('Include chars:', webFont.chars);
+                    grunt.log.writeln('Font id:', webFont.id);
+                    grunt.log.writeln('CSS selector:', webFont.selectors.join(', '));
+                    grunt.log.writeln('Font files:');
+
+                    webFont.files.forEach(function (file) {
+                        if (grunt.file.exists(file)) {
+                            grunt.log.writeln('File', color('cyan', path.relative('./', file)),
+                                'created:', color('green', + fs.statSync(file).size / 1000 + ' KB'));
+                        } else {
+                            grunt.log.writeln(color('red', 'File ' + path.relative('./', file) + ' not created'));
+                        }
+                    });
+
+                    grunt.log.writeln('');
                 });
-            };
 
-            fontspider.onend = function () {
                 done();
-            };
-
-            fontspider.onerror = function (e) {
-                grunt.log.warn(e.message);
-                grunt.fail.fatal(e);
-            }
-
-            fontspider.start();
+            }, function (errors) {
+                grunt.log.warn(errors.message);
+                grunt.fail.fatal(errors); 
+            });
             
             return f;
         });
     });
 
 };
+
+function color (name, string) {
+    return string[name];
+}

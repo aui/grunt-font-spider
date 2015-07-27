@@ -1,7 +1,7 @@
 {
   "name": "grunt-font-spider",
   "description": "Optimize fonts with Grunt",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "homepage": "https://github.com/aui/grunt-font-spider",
   "author": {
     "name": "aui",
@@ -20,15 +20,15 @@
       "url": "https://github.com/aui/grunt-font-spider/blob/master/LICENSE-MIT"
     }
   ],
+  "scripts": {
+    "test": "grunt"
+  },
   "main": "Gruntfile.js",
   "engines": {
     "node": ">= 0.8.0"
   },
-  "scripts": {
-    "test": "grunt test"
-  },
   "dependencies": {
-    "font-spider": "^0.1.0"
+    "font-spider": ">=0.3.0"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
