@@ -55,6 +55,7 @@ module.exports = function(grunt) {
                         grunt.log.writeln('Font files:');
 
                         webFont.files.forEach(function(file) {
+                            file = file.toString();
                             if (grunt.file.exists(file)) {
                                 grunt.log.writeln('File', color('cyan', path.relative('./', file)),
                                     'created:', color('green', +fs.statSync(file).size / 1000 + ' KB'));
