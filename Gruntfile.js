@@ -1,10 +1,6 @@
 'use strict';
 
-
-
 module.exports = function(grunt) {
-
-
 
   // Project configuration.
   grunt.initConfig({
@@ -12,7 +8,7 @@ module.exports = function(grunt) {
     copy: {
       html: {
         src: './test/**',
-        dest: './dest/'
+        dest: './release/'
       },
     },
 
@@ -21,7 +17,7 @@ module.exports = function(grunt) {
         backup: false
       },
       html: {
-        src: './dest/test/**/*.html'
+        src: './release/**/*.html'
       }
     }
 
