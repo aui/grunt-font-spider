@@ -1,8 +1,9 @@
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 var FontSpider = require('font-spider');
+var colors = require('colors/safe');
+
 
 module.exports = function(grunt) {
 
@@ -47,20 +48,19 @@ module.exports = function(grunt) {
 
                     webFonts.forEach(function(webFont) {
 
-                        grunt.log.writeln('Font family:', color('green', webFont.family));
-                        grunt.log.writeln('Original size:', color('green', webFont.originalSize / 1000 + ' KB'));
+                        grunt.log.writeln('Font family:', colors.green(webFont.family));
+                        grunt.log.writeln('Original size:', colors.green(webFont.originalSize / 1000 + ' KB'));
                         grunt.log.writeln('Include chars:', webFont.chars);
                         grunt.log.writeln('Font id:', webFont.id);
                         grunt.log.writeln('CSS selector:', webFont.selectors.join(', '));
                         grunt.log.writeln('Font files:');
 
                         webFont.files.forEach(function(file) {
-                            file = file.toString();
-                            if (grunt.file.exists(file)) {
-                                grunt.log.writeln('File', color('cyan', path.relative('./', file)),
-                                    'created:', color('green', +fs.statSync(file).size / 1000 + ' KB'));
+                            if (grunt.file.exists(file.source)) {
+                                grunt.log.writeln('File', colors.cyan(path.relative('./', file.source)),
+                                    'created:', colors.green(file.size / 1000 + ' KB'));
                             } else {
-                                grunt.log.writeln(color('red', 'File ' + path.relative('./', file) + ' not created'));
+                                grunt.log.writeln(colors.red('File ' + path.relative('./', file.source) + ' not created'));
                             }
                         });
 

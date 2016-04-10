@@ -21,14 +21,14 @@
     }
   ],
   "scripts": {
-    "demo": "grunt",
-    "test": "npm run demo"
+    "test": "grunt"
   },
   "main": "Gruntfile.js",
   "engines": {
     "node": ">= 0.8.0"
   },
   "dependencies": {
+    "colors": "^1.1.2",
     "font-spider": "1.0.0-pre"
   },
   "devDependencies": {
