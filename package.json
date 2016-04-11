@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "colors": "^1.1.2",
-    "font-spider": "1.0.0-beta"
+    "font-spider": "1.0.0-beta1"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
