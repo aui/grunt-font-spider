@@ -52,7 +52,7 @@ module.exports = function(grunt) {
                         grunt.log.writeln('Original size:', colors.green(webFont.originalSize / 1000 + ' KB'));
                         grunt.log.writeln('Include chars:', webFont.chars);
                         grunt.log.writeln('Font id:', webFont.id);
-                        grunt.log.writeln('CSS selector:', webFont.selectors.join(', '));
+                        grunt.log.writeln('CSS selectors:', webFont.selectors.join(', '));
                         grunt.log.writeln('Font files:');
 
                         webFont.files.forEach(function(file) {
