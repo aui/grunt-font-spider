@@ -1,2 +1,11 @@
-dest
 node_modules
+.DS_Store
+cache.manifest
+_draft/
+npm-debug.log
+.tmp
+.sass-cache
+.idea
+.markdowns
+release
+test

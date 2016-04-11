@@ -1,38 +1,35 @@
 'use strict';
 
-
-
 module.exports = function(grunt) {
 
+    // Project configuration.
+    grunt.initConfig({
 
+        copy: {
+            html: {
+                src: './test/**',
+                dest: './release/'
+            },
+        },
 
-  // Project configuration.
-  grunt.initConfig({
+        'font-spider': {
+            options: {
+                backup: false,
+                ignore: ['*.woff2']
+            },
+            html: {
+                src: './release/**/*.html'
+            }
+        }
 
-    copy: {
-      html: {
-        src: './test/**',
-        dest: './dest/'
-      },
-    },
+    });
 
-    'font-spider': {
-      options: {
-        backup: false
-      },
-      html: {
-        src: './dest/test/**/*.html'
-      }
-    }
+    // Actually load this plugin's task(s).
+    grunt.loadTasks('tasks');
 
-  });
+    grunt.loadNpmTasks('grunt-contrib-copy');
 
-  // Actually load this plugin's task(s).
-  grunt.loadTasks('tasks');
-
-  grunt.loadNpmTasks('grunt-contrib-copy');
-
-  grunt.registerTask('default', ['copy', 'font-spider']);
+    grunt.registerTask('default', ['copy', 'font-spider']);
 
 
 
