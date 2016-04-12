@@ -9,25 +9,29 @@ module.exports = function(grunt) {
 
     grunt.registerMultiTask('font-spider', 'Optimize fonts with Grunt', function() {
 
+
         var that = this;
         var debug = grunt.option('debug');
         var options = this.options({
-            resourceLoad: function(file) {
+            resourceBeforeLoad: function(file) {
                 var RE_SERVER = /^https?\:\/\//i;
                 if (RE_SERVER.test(file)) {
                     grunt.log.writeln('Load:', file);
                 }
-            },
-            debug: debug
+            }
         });
+
+        if (debug) {
+            options.silent = false;
+        }
 
 
         this.files.forEach(function(f) {
 
-            // Filter non-existing sources
-            f.src.filter(function() {
-                if (!grunt.file.exists()) {
-                    grunt.log.warn('Source file "' + f.src + '" not found.');
+            // TODO test
+            var htmlFiles = f.src.filter(function(file) {
+                if (!grunt.file.exists(file)) {
+                    grunt.log.warn('Source file "' + file + '" not found.');
                     return false;
                 } else {
                     return true;
@@ -36,14 +40,14 @@ module.exports = function(grunt) {
 
 
             // Don't proceed if no files found
-            if (f.src.length === 0) {
+            if (htmlFiles.length === 0) {
                 return f;
             }
 
             var done = that.async();
 
 
-            new FontSpider(f.src, options)
+            new FontSpider(htmlFiles, options)
                 .then(function(webFonts) {
 
                     webFonts.forEach(function(webFont) {
