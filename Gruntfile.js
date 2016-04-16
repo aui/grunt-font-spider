@@ -15,7 +15,7 @@ module.exports = function(grunt) {
         'font-spider': {
             options: {
                 backup: false,
-                ignore: ['*.woff2']
+                ignore: ['\\.woff2$']
             },
             html: {
                 src: './release/**/*.html'
