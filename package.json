@@ -1,7 +1,7 @@
 {
   "name": "grunt-font-spider",
   "description": "Optimize fonts with Grunt",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "homepage": "https://github.com/aui/grunt-font-spider",
   "author": {
     "name": "aui",
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "colors": "^1.1.2",
-    "font-spider": "1.0.0-beta2"
+    "font-spider": "^1.0.0-beta3"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
