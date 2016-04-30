@@ -12,14 +12,15 @@ module.exports = function(grunt) {
 
         var that = this;
         var debug = grunt.option('debug');
-        var options = this.options({
-            resourceBeforeLoad: function(file) {
-                var RE_SERVER = /^https?\:\/\//i;
-                if (RE_SERVER.test(file)) {
-                    grunt.log.writeln('Load:', file);
+        var options = this.options();
+
+        if (!options.resourceBeforeLoad) {
+            options.resourceBeforeLoad = function(file) {
+                if (/https?/.test(file)) {
+                    grunt.log.writeln('Load:', colors.cyan(file));
                 }
-            }
-        });
+            };
+        }
 
         if (debug) {
             options.silent = false;
@@ -60,11 +61,11 @@ module.exports = function(grunt) {
                         grunt.log.writeln('Font files:');
 
                         webFont.files.forEach(function(file) {
-                            if (grunt.file.exists(file.source)) {
-                                grunt.log.writeln('File', colors.cyan(path.relative('./', file.source)),
+                            if (grunt.file.exists(file.url)) {
+                                grunt.log.writeln('File', colors.cyan(path.relative('./', file.url)),
                                     'created:', colors.green(file.size / 1000 + ' KB'));
                             } else {
-                                grunt.log.writeln(colors.red('File ' + path.relative('./', file.source) + ' not created'));
+                                grunt.log.writeln(colors.red('File ' + path.relative('./', file.url) + ' not created'));
                             }
                         });
 
@@ -82,7 +83,3 @@ module.exports = function(grunt) {
     });
 
 };
-
-function color(name, string) {
-    return string[name];
-}
