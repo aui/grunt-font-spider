@@ -186,12 +186,12 @@ module.exports = function(grunt) {
 
 来源：<http://caniuse.com/#feat=fontface>
 
-## 相关链接
+## 免费字体
 
-- [fontmin](https://github.com/ecomfe/fontmin)
-- [Google: 网页字体优化](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/webfont-optimization?hl=zh-cn)
-- [思源黑体: ttf 版本](https://github.com/akiratw/kaigen-gothic/releases)
-
+- [思源黑体: 简体中文 ttf 版本](https://github.com/aui/free-fonts/archive/KaiGenGothic-1.001-SimplifiedChinese.zip)
+- [思源黑体: 繁体中文 ttf 版本](https://github.com/aui/free-fonts/archive/KaiGenGothic-1.001-TraditionalChinese.zip)
+- [思源黑体: 中、日、韩 ttf 版本](https://mega.nz/#!PZxFSYQI!ICvNugaFX_y4Mh003-S3fao1zU0uNpeSyprdmvHDnwc)
+- [开源图标字体: Font Awesome](http://fontawesome.io)
 
 =============
 
